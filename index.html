@@ -329,7 +329,6 @@
           <i class="fas fa-check-circle" style="font-size:2rem; color:#28a745;"></i>
           <h3 style="margin:10px 0;">✅ Registration Successful!</h3>
           <p>Your Athlete ID and card details have been sent to your email and phone.</p>
-          <p style="font-weight:700; font-size:1.2rem; margin-top:8px;" id="displayAthleteId"></p>
         </div>
       </div>
     </section>
@@ -531,7 +530,6 @@
     // ---------- ATHLETE DATA ----------
     let athletes = [];
     let leaderboardData = [];
-    let athleteIdCounter = 1001;
 
     // ---------- ATHLETE REGISTRATION ----------
     function submitAthleteRegistration(e) {
@@ -556,9 +554,8 @@
       const athleteData = {};
       formData.forEach((val, key) => { athleteData[key] = val; });
       
-      const athleteId = 'CPB' + athleteIdCounter++;
+      // Store athlete without auto-generating ID
       const newAthlete = {
-        id: athleteId,
         fullname: athleteData.fullname || 'N/A',
         dob: athleteData.dob || 'N/A',
         gender: athleteData.gender || 'N/A',
@@ -566,19 +563,14 @@
         state: athleteData.state || 'N/A',
         category: 'Runner',
         profileImg: athleteData.profile_img || 'https://randomuser.me/api/portraits/lego/1.jpg',
-        isMember: false
+        email: athleteData.email || '',
+        phone: athleteData.phone || ''
       };
       
-      const hiddenId = document.createElement('input');
-      hiddenId.type = 'hidden';
-      hiddenId.name = 'athlete_id';
-      hiddenId.value = athleteId;
-      form.appendChild(hiddenId);
+      athletes.push(newAthlete);
       
       submitToWeb3Forms(form, form, 'Registration successful! Card details sent to your email.', () => {
-        athletes.push(newAthlete);
         document.getElementById('registrationSuccess').style.display = 'block';
-        document.getElementById('displayAthleteId').textContent = `Your Athlete ID: ${athleteId}`;
         document.getElementById('registrationSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     }
