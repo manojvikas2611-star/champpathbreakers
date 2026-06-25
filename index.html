@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+  <title>CHAMP PATH BREAKERS · running platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f6f9fc;
+      color: #1a2634;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+    .container { max-width:1400px; margin:0 auto; padding:0 24px; }
+    .btn-primary {
+      background: linear-gradient(135deg, #f5b041, #e67e22);
+      border: none; color: #fff; font-weight: 700;
+      padding: 12px 28px; border-radius: 60px; cursor: pointer;
+      transition: 0.2s; box-shadow: 0 6px 16px rgba(230,126,34,0.25);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-primary:hover { transform:scale(1.02); background:#f39c12; }
+    .btn-outline {
+      background:transparent; border:1.5px solid #e67e22;
+      color:#e67e22; font-weight:600; padding:8px 20px;
+      border-radius:40px; transition:0.2s; cursor:pointer;
+    }
+    .btn-outline:hover { background:#f5b04120; border-color:#f7c35c; }
+    .navbar {
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; padding:16px 0; gap:12px;
+      border-bottom:1px solid #e9edf2; position:relative;
+    }
+    .logo-area { display:flex; align-items:center; gap:12px; flex:1; }
+    .logo-img { height:48px; width:auto; border-radius:12px; background:#fff; padding:4px 8px; }
+    .brand-text {
+      font-size:1.6rem; font-weight:800; letter-spacing:-0.5px;
+      background:linear-gradient(135deg,#f5b041,#e67e22);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .brand-sub { font-size:0.7rem; color:#5e6f88; letter-spacing:2px; text-transform:uppercase; }
+    .hamburger {
+      font-size:1.8rem; cursor:pointer; color:#1a2634;
+      background:none; border:none; padding:8px; margin-left:auto;
+    }
+    .hamburger:hover { color:#e67e22; }
+    .nav-menu {
+      display:none; position:absolute; top:70px; right:0;
+      background:#fff; border-radius:24px;
+      box-shadow:0 20px 48px -12px rgba(0,0,0,0.15);
+      padding:16px 20px; min-width:200px; border:1px solid #e9edf2; z-index:100;
+    }
+    .nav-menu.active { display:block; }
+    .nav-menu a {
+      display:block; padding:10px 14px; color:#1a2634;
+      text-decoration:none; font-weight:600; border-radius:12px;
+      transition:0.15s; border-bottom:1px solid #f0f4fa;
+    }
+    .nav-menu a:last-child { border-bottom:none; }
+    .nav-menu a:hover { background:#f5b04120; color:#e67e22; }
+    .nav-menu a i { margin-right:12px; width:20px; color:#e67e22; }
+    .section { display:none; padding:20px 0 40px; animation:fadeIn 0.3s ease; }
+    .section.active { display:block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .section-title {
+      font-size:2.2rem; font-weight:700; margin:20px 0 16px;
+      letter-spacing:-0.5px; border-left:6px solid #f5b041;
+      padding-left:20px; color:#1a2634;
+    }
+    .form-glass {
+      background:#fff; padding:32px 28px; border-radius:40px;
+      border:1px solid #e2e8f0; box-shadow:0 12px 32px -8px rgba(0,0,0,0.06);
+      margin:0 0 20px;
+    }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .form-grid .full-width { grid-column:1/-1; }
+    input, select, textarea {
+      width:100%; padding:14px 18px; background:#f2f6fa;
+      border:1px solid #dce3ec; border-radius:40px; color:#1a2634;
+      font-size:0.95rem; transition:0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline:none; border-color:#f5b041; box-shadow:0 0 0 3px #f5b04140;
+    }
+    .event-grid, .athlete-grid, .leaderboard-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+      gap:28px; margin-top:20px;
+    }
+    .event-card, .profile-card {
+      background:#fff; padding:18px 18px 24px; border-radius:32px;
+      border:1px solid #e9edf2; box-shadow:0 4px 12px rgba(0,0,0,0.02);
+      transition:0.2s; display:flex; flex-direction:column;
+    }
+    .event-card:hover, .profile-card:hover { border-color:#f5b041; box-shadow:0 12px 28px -8px rgba(0,0,0,0.08); }
+    .event-img { width:100%; height:160px; object-fit:cover; border-radius:18px; background:#eef2f7; margin-bottom:12px; }
+    .event-badge {
+      display:inline-block; background:#2ecc71; color:#fff; font-weight:700;
+      font-size:0.7rem; padding:4px 14px; border-radius:40px; align-self:flex-start;
+    }
+    .event-badge.paid { background:#f1c40f; color:#1a2634; }
+    .profile-card img { width:100px; height:100px; border-radius:50%; object-fit:cover; background:#eef2f7; margin-bottom:10px; }
+    .profile-card .athlete-id {
+      font-size:0.8rem; color:#e67e22; font-weight:700;
+      background:#f5b04120; padding:4px 12px; border-radius:40px;
+      display:inline-block; margin:6px 0;
+    }
+    .tracker-stats {
+      display:flex; justify-content:space-around; background:#f0f4fa;
+      padding:20px; border-radius:40px; margin:24px 0;
+    }
+    .stat-number { font-size:2rem; font-weight:800; color:#e67e22; }
+    .tools-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:24px; margin:30px 0;
+    }
+    .tool-card {
+      background:#fff; padding:24px 16px; border-radius:32px;
+      text-align:center; border:1px solid #e9edf2;
+    }
+    .hidden { display:none !important; }
+    .card-actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    .card-actions button { flex:1; min-width:80px; }
+    .location-disclaimer {
+      background:#fff3e0; border-left:6px solid #e67e22;
+      padding:16px 24px; border-radius:16px; margin:20px 0;
+      font-weight:600; color:#b85e0e;
+    }
+    .whatsapp-link {
+      display:inline-flex; align-items:center; gap:12px;
+      background:#25D366; color:#fff; padding:14px 28px;
+      border-radius:60px; text-decoration:none; font-weight:700;
+      transition:0.2s; margin:12px 0;
+    }
+    .whatsapp-link:hover { transform:scale(1.03); box-shadow:0 8px 24px rgba(37,211,102,0.3); }
+    footer {
+      margin-top:60px; padding:32px 0;
+      border-top:1px solid #e2e8f0; text-align:center; color:#5e6f88;
+    }
+    .success-message {
+      background:#d4edda; border:2px solid #28a745;
+      border-radius:16px; padding:20px; margin:20px 0;
+      color:#155724; text-align:center;
+    }
+    @media (max-width:780px) {
+      .form-grid { grid-template-columns:1fr; }
+      .brand-text { font-size:1.2rem; }
+      .nav-menu { right:0; left:0; top:65px; min-width:auto; }
+      .logo-img { height:40px; }
+    }
+    @media (max-width:480px) {
+      .navbar { flex-wrap:nowrap; }
+      .brand-sub { display:none; }
+      .event-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- header -->
+    <header class="navbar">
+      <div class="logo-area">
+        <img class="logo-img" src="https://i.postimg.cc/k5y73wy8/3607c40d-2f54-4e28-9ebb-dd4624d4458e.png" alt="CHAMP PATH BREAKERS logo" />
+        <div>
+          <div class="brand-text">CHAMP PATH BREAKERS</div>
+          <div class="brand-sub">run · evolve · conquer</div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburgerBtn" aria-label="menu"><i class="fas fa-bars"></i></button>
+      <div class="nav-menu" id="navMenu">
+        <a href="#" data-section="events"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="#" data-section="athletes"><i class="fas fa-users"></i> Athletes</a>
+        <a href="#" data-section="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+        <a href="#" data-section="register"><i class="fas fa-user-plus"></i> Register</a>
+        <a href="#" data-section="tracker"><i class="fas fa-running"></i> Daily Tracker</a>
+        <a href="#" data-section="tools"><i class="fas fa-tools"></i> Running Tools</a>
+        <a href="#" data-section="community"><i class="fas fa-star"></i> Community</a>
+      </div>
+    </header>
+
+    <!-- ========== SECTIONS ========== -->
+    <!-- EVENTS -->
+    <section id="section-events" class="section active">
+      <h2 class="section-title"><i class="fas fa-calendar-alt" style="color:#f5b041; margin-right:12px;"></i>Upcoming Races & Marathons</h2>
+      <button class="btn-primary" onclick="toggleEventForm()" style="margin-bottom:20px;"><i class="fas fa-plus-circle"></i> Add Event</button>
+      <div id="eventFormWrapper" style="display:none;">
+        <div class="form-glass">
+          <h3 style="margin-bottom:20px; font-weight:700; color:#1a2634;"><i class="fas fa-pen-alt" style="color:#f5b041;"></i> Add new event</h3>
+          <form id="eventSubmitForm" onsubmit="submitEventForm(event)">
+            <div class="form-grid">
+              <input type="text" name="organizer" placeholder="Organizer Name" required>
+              <input type="text" name="contact" placeholder="Organizer Contact Number" required>
+              <input type="text" name="event_name" placeholder="Event Name" required>
+              <input type="text" name="location" placeholder="Event Location" required>
+              <input type="text" name="state" placeholder="State" required>
+              <input type="date" name="event_date" required>
+              <select name="fee_type" required>
+                <option value="">Free or Paid</option>
+                <option value="Free">Free</option>
+                <option value="Paid">Paid</option>
+              </select>
+              <select name="race_type" required>
+                <option value="">Marathon/Race Type</option>
+                <option value="5K">5K</option>
+                <option value="10K">10K</option>
+                <option value="Half Marathon">Half Marathon</option>
+                <option value="Full Marathon">Full Marathon</option>
+                <option value="Ultra">Ultra</option>
+              </select>
+              <input type="text" name="distance" placeholder="Total Distance (e.g. 42KM)">
+              <div class="full-width">
+                <label style="font-weight:600;">Finisher Benefits</label>
+                <div class="checkbox-group" style="display:flex; flex-wrap:wrap; gap:12px; margin:8px 0;">
+                  <label><input type="checkbox" name="benefits" value="Certificate"> Certificate</label>
+                  <label><input type="checkbox" name="benefits" value="Medal"> Medal</label>
+                  <label><input type="checkbox" name="benefits" value="Refreshments"> Refreshments</label>
+                  <label><input type="checkbox" name="benefits" value="Music/Festival"> Music/Festival</label>
+                  <label><input type="checkbox" name="benefits" value="T-Shirt"> T-Shirt</label>
+                  <label><input type="checkbox" name="benefits" value="Goodie Bag"> Goodie Bag</label>
+                  <label><input type="checkbox" name="benefits" value="Vitamins"> Vitamins</label>
+                  <label><input type="checkbox" name="benefits" value="Food"> Food</label>
+                  <label><input type="checkbox" name="benefits" value="Other"> Other</label>
+                </div>
+              </div>
+              <div class="full-width"><label>Event Poster URL</label><input type="text" name="poster" placeholder="https://..."></div>
+              <div class="full-width"><label>Additional images URL</label><input type="text" name="images" placeholder="https://..."></div>
+              <div class="full-width"><button type="submit" class="btn-primary"><i class="fas fa-check-circle"></i> Confirm Event</button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="event-grid" id="eventGrid">
+        <p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:40px 0;">No events yet. Click "Add Event" to create one.</p>
+      </div>
+    </section>
+
+    <!-- ATHLETES -->
+    <section id="section-athletes" class="section">
+      <h2 class="section-title"><i class="fas fa-users" style="color:#f5b041;"></i> Athletes</h2>
+      <div class="athlete-grid" id="athleteGrid">
+        <p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:20px 0;">No athletes registered yet.</p>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="section-leaderboard" class="section">
+      <h2 class="section-title"><i class="fas fa-trophy" style="color:#f5b041;"></i> Leaderboard</h2>
+      <div style="margin-bottom:20px; background:#fff; border-radius:28px; padding:20px; border:1px solid #e9edf2;">
+        <h4 style="margin-bottom:12px;"><i class="fas fa-user-cog"></i> Add to Leaderboard</h4>
+        <form id="leaderboardForm" onsubmit="submitLeaderboard(event)">
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:end;">
+            <input type="text" name="athlete_id" placeholder="Athlete ID" required style="flex:1; min-width:150px;">
+            <input type="text" name="video_proof" placeholder="Video Proof Link" required style="flex:1; min-width:200px;">
+            <button type="submit" class="btn-primary"><i class="fas fa-plus"></i> Add</button>
+          </div>
+        </form>
+        <div id="lbMessage" style="margin-top:8px; font-size:0.9rem;"></div>
+      </div>
+      <div class="leaderboard-grid" id="leaderboardGrid">
+        <p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:20px 0;">Leaderboard is empty.</p>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section id="section-register" class="section">
+      <h2 class="section-title"><i class="fas fa-id-card" style="color:#f5b041;"></i> Athlete Registration</h2>
+      <div class="form-glass">
+        <form id="athleteRegForm" onsubmit="submitAthleteRegistration(event)">
+          <div class="form-grid">
+            <input type="text" name="fullname" placeholder="Full Name" required>
+            <input type="date" name="dob" required>
+            <select name="gender" required>
+              <option value="">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <input type="text" name="city" placeholder="City" required>
+            <input type="text" name="state" placeholder="State" required>
+            <div class="full-width">
+              <label>Runner Category</label>
+              <input type="text" name="category" value="Runner" readonly style="background:#eef2f7; cursor:not-allowed;">
+            </div>
+            <div class="full-width">
+              <label>Email ID (for receiving card)</label>
+              <input type="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="full-width">
+              <label>Phone Number</label>
+              <input type="tel" name="phone" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="full-width">
+              <label>Profile Image URL (Passport size)</label>
+              <input type="text" name="profile_img" placeholder="https://...">
+            </div>
+            <div class="full-width">
+              <button type="submit" class="btn-primary"><i class="fas fa-user-check"></i> Generate Card</button>
+            </div>
+          </div>
+        </form>
+        <div id="registrationSuccess" style="display:none;" class="success-message">
+          <i class="fas fa-check-circle" style="font-size:2rem; color:#28a745;"></i>
+          <h3 style="margin:10px 0;">✅ Registration Successful!</h3>
+          <p>Your Athlete ID and card details have been sent to your email and phone.</p>
+          <p style="font-weight:700; font-size:1.2rem; margin-top:8px;" id="displayAthleteId"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAILY TRACKER -->
+    <section id="section-tracker" class="section">
+      <h2 class="section-title"><i class="fas fa-running"></i> Daily Running Tracker</h2>
+      <div class="glass-card" style="padding:24px; background:#fff;">
+        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:end;">
+          <input type="date" id="runDate" value="2026-06-24" style="width:auto; flex:1;">
+          <input type="number" id="runDist" placeholder="Distance (KM)" style="width:120px;">
+          <input type="text" id="runTime" placeholder="Time (min)" style="width:120px;">
+          <input type="text" id="runRoute" placeholder="Route" style="flex:2;">
+          <input type="text" id="runImg" placeholder="Image URL" style="flex:2;">
+          <input type="text" id="runNotes" placeholder="Notes" style="flex:2;">
+          <button class="btn-primary" onclick="addDailyRun()"><i class="fas fa-save"></i> Add</button>
+        </div>
+        <div class="tracker-stats">
+          <div class="stat-item"><span class="stat-number" id="weeklyDist">0</span><br>Weekly</div>
+          <div class="stat-item"><span class="stat-number" id="monthlyDist">0</span><br>Monthly</div>
+          <div class="stat-item"><span class="stat-number" id="totalDist">0</span><br>Total</div>
+        </div>
+        <div id="runLog" style="margin-top:16px; max-height:200px; overflow-y:auto;"></div>
+      </div>
+    </section>
+
+    <!-- TOOLS -->
+    <section id="section-tools" class="section">
+      <h2 class="section-title"><i class="fas fa-tools"></i> Running Tools</h2>
+      <div class="tools-grid">
+        <div class="tool-card"><i class="fas fa-stopwatch" style="font-size:2rem; color:#f5b041;"></i><h4>Stopwatch</h4><div id="stopwatchDisplay" style="font-size:2rem; color:#1a2634;">00:00</div><div><button class="btn-outline" onclick="startStop()">Start</button> <button class="btn-outline" onclick="resetStop()">Reset</button></div></div>
+        <div class="tool-card"><i class="fas fa-calculator"></i><h4>Distance Calculator</h4><input id="distCalc" placeholder="KM" style="width:100px;"><button class="btn-primary" onclick="alert('Distance: '+document.getElementById('distCalc').value+' KM')">Calc</button></div>
+        <div class="tool-card"><i class="fas fa-map-marked-alt"></i><h4>Google Maps</h4><button class="btn-primary" onclick="window.open('https://www.google.com/maps','_blank')">Open Map</button></div>
+        <div class="tool-card"><i class="fas fa-tachometer-alt"></i><h4>Pace Calculator</h4><input id="paceDist" placeholder="KM" style="width:80px;"> <input id="paceTime" placeholder="min" style="width:80px;"><button class="btn-primary" onclick="alert('Pace: '+ (document.getElementById('paceTime').value / document.getElementById('paceDist').value || 0).toFixed(1)+' min/km')">Pace</button></div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY -->
+    <section id="section-community" class="section">
+      <h2 class="section-title"><i class="fas fa-star"></i> Community & Badges</h2>
+      <a href="https://chat.whatsapp.com/FT4ALt3PK6U7OGWKDAD7rK?s=cl&p=a&mlu=2&amv=0" target="_blank" class="whatsapp-link">
+        <i class="fab fa-whatsapp" style="font-size:1.8rem;"></i> Join our WhatsApp Community
+      </a>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin:20px 0;">
+        <span class="btn-outline" style="background:#f0f4fa; border-color:#dce3ec;"><i class="fas fa-medal"></i> First Marathon</span>
+        <span class="btn-outline"><i class="fas fa-trophy"></i> 100KM</span>
+        <span class="btn-outline"><i class="fas fa-bolt"></i> Speed Runner</span>
+        <span class="btn-outline"><i class="fas fa-crown"></i> Champion</span>
+      </div>
+      <div style="background:#fff; border-radius:28px; padding:24px; border:1px solid #e9edf2;">
+        <p style="color:#5e6f88;">Share your running stories, achievements, and connect with the community.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="location-disclaimer" style="margin-bottom:16px;">
+        <i class="fas fa-map-marker-alt" style="margin-right:12px;"></i>
+        <strong>⚠️ This platform is only for runners from Uttar Pradesh, Ghaziabad, and Delhi NCR.</strong>
+      </div>
+      <p>© 2026 CHAMP PATH BREAKERS · run with purpose</p>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- HAMBURGER ----------
+    const hamburger = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    hamburger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navMenu.classList.toggle('active');
+    });
+    document.addEventListener('click', function(e) {
+      if (!navMenu.contains(e.target) && e.target !== hamburger) {
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ---------- SECTION NAVIGATION ----------
+    const menuLinks = document.querySelectorAll('.nav-menu a[data-section]');
+    const sections = {
+      events: document.getElementById('section-events'),
+      athletes: document.getElementById('section-athletes'),
+      leaderboard: document.getElementById('section-leaderboard'),
+      register: document.getElementById('section-register'),
+      tracker: document.getElementById('section-tracker'),
+      tools: document.getElementById('section-tools'),
+      community: document.getElementById('section-community')
+    };
+    menuLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const sectionId = this.dataset.section;
+        Object.values(sections).forEach(sec => sec.classList.remove('active'));
+        if (sections[sectionId]) sections[sectionId].classList.add('active');
+        navMenu.classList.remove('active');
+        sections[sectionId].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ---------- TOGGLE EVENT FORM ----------
+    function toggleEventForm() {
+      const wrapper = document.getElementById('eventFormWrapper');
+      wrapper.style.display = wrapper.style.display === 'none' || wrapper.style.display === '' ? 'block' : 'none';
+      if (wrapper.style.display === 'block') wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ---------- WEB3FORMS SUBMIT FUNCTION ----------
+    function submitToWeb3Forms(formData, formElement, successMsg, callback) {
+      const accessKey = '9c58a289-9abc-4b0f-b952-25abae3e0482';
+      const data = new FormData(formElement);
+      data.append('access_key', accessKey);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          alert(successMsg || 'Submitted successfully!');
+          formElement.reset();
+          if (callback) callback();
+        } else {
+          alert('Error: ' + (result.message || 'Something went wrong.'));
+        }
+      })
+      .catch(error => {
+        alert('Error submitting form: ' + error.message);
+      });
+    }
+
+    // ---------- EVENT FORM ----------
+    function submitEventForm(e) {
+      e.preventDefault();
+      submitToWeb3Forms(e.target, e.target, 'Event submitted successfully!', () => {
+        document.getElementById('eventFormWrapper').style.display = 'none';
+      });
+    }
+
+    // ---------- ATHLETE REGISTRATION ----------
+    let athletes = [];
+    let leaderboardData = [];
+    let athleteIdCounter = 1001;
+
+    function submitAthleteRegistration(e) {
+      e.preventDefault();
+      const form = e.target;
+      const inputs = form.querySelectorAll('input[required], select[required]');
+      let valid = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          valid = false;
+          input.style.borderColor = '#e74c3c';
+        } else {
+          input.style.borderColor = '#dce3ec';
+        }
+      });
+      if (!valid) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      // Get form data
+      const formData = new FormData(form);
+      const athleteData = {};
+      formData.forEach((val, key) => { athleteData[key] = val; });
+      
+      const athleteId = 'CPB' + athleteIdCounter++;
+      const newAthlete = {
+        id: athleteId,
+        fullname: athleteData.fullname || 'N/A',
+        dob: athleteData.dob || 'N/A',
+        gender: athleteData.gender || 'N/A',
+        city: athleteData.city || 'N/A',
+        state: athleteData.state || 'N/A',
+        category: 'Runner',
+        profileImg: athleteData.profile_img || 'https://randomuser.me/api/portraits/lego/1.jpg',
+        email: athleteData.email || '',
+        phone: athleteData.phone || ''
+      };
+      
+      // Add email and phone to form data for web3forms
+      const hiddenEmail = document.createElement('input');
+      hiddenEmail.type = 'hidden';
+      hiddenEmail.name = 'athlete_id';
+      hiddenEmail.value = athleteId;
+      form.appendChild(hiddenEmail);
+      
+      // Submit to web3forms
+      submitToWeb3Forms(form, form, 'Registration successful! Card details sent to your email.', () => {
+        athletes.push(newAthlete);
+        renderAthletes();
+        // Show success message
+        document.getElementById('registrationSuccess').style.display = 'block';
+        document.getElementById('displayAthleteId').textContent = `Your Athlete ID: ${athleteId}`;
+        // Scroll to success message
+        document.getElementById('registrationSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+
+    function renderAthletes() {
+      const grid = document.getElementById('athleteGrid');
+      if (athletes.length === 0) {
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:20px 0;">No athletes registered yet.</p>';
+        return;
+      }
+      grid.innerHTML = athletes.map(a => `
+        <div class="profile-card">
+          <img src="${a.profileImg}" alt="${a.fullname}" />
+          <div class="athlete-id"><i class="fas fa-id-card"></i> ${a.id}</div>
+          <h4>${a.fullname}</h4>
+          <div>${a.gender} · ${a.dob}</div>
+          <div style="font-size:0.85rem; color:#5e6f88;">${a.city}, ${a.state}</div>
+          <div style="font-size:0.85rem; color:#e67e22;">${a.category}</div>
+          <div style="font-size:0.8rem; color:#5e6f88;">📧 ${a.email || 'N/A'}</div>
+        </div>
+      `).join('');
+    }
+
+    // ---------- LEADERBOARD ----------
+    function submitLeaderboard(e) {
+      e.preventDefault();
+      const form = e.target;
+      const inputs = form.querySelectorAll('input[required]');
+      let valid = true;
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          valid = false;
+          input.style.borderColor = '#e74c3c';
+        } else {
+          input.style.borderColor = '#dce3ec';
+        }
+      });
+      if (!valid) {
+        document.getElementById('lbMessage').innerHTML = '<span style="color:#e74c3c;">❌ Please fill in all required fields.</span>';
+        return;
+      }
+      submitToWeb3Forms(form, form, 'Added to leaderboard!', () => {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((val, key) => { data[key] = val; });
+        const athlete = athletes.find(a => a.id === data.athlete_id);
+        if (athlete) {
+          const lbEntry = {
+            id: data.athlete_id,
+            videoProof: data.video_proof || '',
+            fullname: athlete.fullname,
+            profileImg: athlete.profileImg,
+            dob: athlete.dob,
+            category: athlete.category
+          };
+          leaderboardData.push(lbEntry);
+          renderLeaderboard();
+          document.getElementById('lbMessage').innerHTML = '<span style="color:#27ae60;">✅ Added to leaderboard!</span>';
+        } else {
+          document.getElementById('lbMessage').innerHTML = '<span style="color:#e74c3c;">❌ Athlete not found. Please register first.</span>';
+        }
+      });
+    }
+
+    function renderLeaderboard() {
+      const grid = document.getElementById('leaderboardGrid');
+      if (leaderboardData.length === 0) {
+        grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:20px 0;">Leaderboard is empty.</p>';
+        return;
+      }
+      grid.innerHTML = leaderboardData.map((l, idx) => `
+        <div class="profile-card">
+          <div style="font-size:2rem; color:#f5b041;">#${idx + 1}</div>
+          <img src="${l.profileImg || 'https://randomuser.me/api/portraits/lego/1.jpg'}" alt="${l.fullname}" />
+          <div class="athlete-id">${l.id}</div>
+          <h4>${l.fullname}</h4>
+          <div>Age: ${l.dob ? new Date().getFullYear() - new Date(l.dob).getFullYear() : 'N/A'}</div>
+          <div style="font-size:0.85rem; color:#e67e22;">${l.category || 'Runner'}</div>
+          ${l.videoProof ? `<div style="font-size:0.85rem; margin-top:8px;"><a href="${l.videoProof}" target="_blank" style="color:#e67e22;"><i class="fas fa-video"></i> View Proof</a></div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // ---------- DAILY RUN TRACKER ----------
+    let dailyRuns = [];
+
+    function addDailyRun() {
+      const date = document.getElementById('runDate').value;
+      const dist = parseFloat(document.getElementById('runDist').value) || 0;
+      const time = document.getElementById('runTime').value;
+      const route = document.getElementById('runRoute').value;
+      const img = document.getElementById('runImg').value;
+      const notes = document.getElementById('runNotes').value;
+      if (!date) return alert('Enter date');
+      dailyRuns.push({ date, dist, time, route, img, notes });
+      updateRunStats();
+      renderRunLog();
+      document.getElementById('runDist').value = '';
+      document.getElementById('runTime').value = '';
+      document.getElementById('runRoute').value = '';
+      document.getElementById('runImg').value = '';
+      document.getElementById('runNotes').value = '';
+    }
+
+    function updateRunStats() {
+      const now = new Date();
+      const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      let weekly = 0, monthly = 0, total = 0;
+      dailyRuns.forEach(r => {
+        const d = new Date(r.date);
+        total += r.dist;
+        if (d >= weekStart) weekly += r.dist;
+        if (d >= monthStart) monthly += r.dist;
+      });
+      document.getElementById('weeklyDist').textContent = weekly.toFixed(1);
+      document.getElementById('monthlyDist').textContent = monthly.toFixed(1);
+      document.getElementById('totalDist').textContent = total.toFixed(1);
+    }
+
+    function renderRunLog() {
+      const log = document.getElementById('runLog');
+      if (dailyRuns.length === 0) {
+        log.innerHTML = '<p style="color:#6a7b94;">No runs logged yet.</p>';
+        return;
+      }
+      log.innerHTML = dailyRuns.slice().reverse().map(r => `
+        <div style="background:#f0f4fa; margin:6px 0; padding:8px 14px; border-radius:40px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <span style="font-weight:600;">${r.date}</span> <strong>${r.dist} KM</strong> <span>${r.time || ''}</span> <span>${r.route || ''}</span> <span style="color:#4a5b72;">${r.notes || ''}</span>
+          ${r.img ? `<img src="${r.img}" style="height:32px; width:32px; border-radius:50%; object-fit:cover;" />` : ''}
+        </div>
+      `).join('');
+    }
+
+    // ---------- STOPWATCH ----------
+    let swInterval, swSeconds = 0, swRunning = false;
+    function updateStopwatch() {
+      const m = String(Math.floor(swSeconds / 60)).padStart(2, '0');
+      const s = String(swSeconds % 60).padStart(2, '0');
+      document.getElementById('stopwatchDisplay').textContent = `${m}:${s}`;
+    }
+    function startStop() {
+      if (swRunning) { clearInterval(swInterval); swRunning = false; return; }
+      swRunning = true;
+      swInterval = setInterval(() => { swSeconds++; updateStopwatch(); }, 1000);
+    }
+    function resetStop() { clearInterval(swInterval); swRunning = false; swSeconds = 0; updateStopwatch(); }
+
+    // ---------- INIT ----------
+    updateRunStats();
+    renderRunLog();
+    renderAthletes();
+    renderLeaderboard();
+  </script>
+</body>
+</html>
