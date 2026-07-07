@@ -265,7 +265,8 @@
         </div>
       </div>
       <div class="event-grid" id="eventGrid">
-        <!-- Event card will be injected by JS -->
+        <!-- Events will be injected by JS -->
+        <p style="grid-column:1/-1; text-align:center; color:#6a7b94; padding:40px 0;">No events yet. Click "Add Event" to create one.</p>
       </div>
     </section>
 
@@ -471,25 +472,6 @@
 
     // ---------- EVENTS DATA ----------
     let events = [];
-
-    // Add the Sri Sathya Sai Run & Ride event with Red Fort image
-    const defaultEvent = {
-      id: 'sss-run-2026',
-      name: 'Sri Sathya Sai Run & Ride',
-      subtitle: 'Run or Ride 3K, 5K or 10K for the spirit of unity',
-      date: 'Sunday, 5 July 2026',
-      time: '5:30 AM onwards',
-      location: 'Jawaharlal Nehru Stadium, New Delhi',
-      organizer: 'Sri Sathya Sai Organization',
-      fee: 'Free',
-      banner: 'https://i.postimg.cc/xdYrZPvy/Red-Fort-Old-Delhi-India.jpg',
-      benefits: ['Exclusive event tee & bib', 'Finisher medal + e-certificate', 'Refreshments', 'Live music, yoga & Zumba'],
-      registerLink: 'https://sssunityrun.ssssoindia.org/event-details/NTE=',
-      distance: '3K, 5K, 10K',
-      type: 'Charity Run'
-    };
-
-    events.push(defaultEvent);
 
     function renderEvents() {
       const grid = document.getElementById('eventGrid');
